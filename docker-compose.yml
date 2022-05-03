@@ -6,6 +6,7 @@ services:
     image: zkey-coordinator-discord
     build: .
     restart: always
+    command: start
 
   discord-redis:
     container_name: discord-redis
@@ -13,3 +14,11 @@ services:
     restart: always
     volumes:
       - ./redis/data:/data
+
+  discord-init:
+    container_name: discord-init
+    image: zkey-coordinator-discord
+    depends_on:
+      - discord-bot
+    restart: never
+    command: deploy-commands
