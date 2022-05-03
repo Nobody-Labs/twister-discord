@@ -9,28 +9,27 @@ const {
     // DISCORD_CONTRIBUTOR_ROLE_ID,
 } = process.env;
 
-const API_COMMANDS_URL = `/applications/${DISCORD_CLIENT_ID}/guilds/${DISCORD_GUILD_ID}/commands`;
 
-const commandFiles = fs.readdirSync('./src/commands').filter(
-    file => file.endsWith('.js')
-);
+async function main() {
+    const API_COMMANDS_URL = `/applications/${DISCORD_CLIENT_ID}/guilds/${DISCORD_GUILD_ID}/commands`;
 
-const commandsBody = [];
-for (const file of commandFiles) {
-	const command = require(`../src/commands/${file}`);
-	commandsBody.push(command.data.toJSON())
-};
+    const commandFiles = fs.readdirSync('./src/commands').filter(
+        file => file.endsWith('.js')
+    );
 
-// rest.get(commandsRoute)
-// 	.then(async commands => {
-// 		commands.forEach(async command => {
-// 			console.log(await rest.delete(`${commandsRoute}/${command.id}`));
-// 		});
-// 		console.log(await rest.get(commandsRoute));
-// 	})
+    const commandsBody = [];
+    for (const file of commandFiles) {
+        const command = require(`../src/commands/${file}`);
+        commandsBody.push(command.data.toJSON())
+    };
 
-(async function() {
     const rest = new REST({ version: '9' }).setToken(DISCORD_BOT_TOKEN);
+    // delete all existing commands
+    const commands = await rest.get(API_COMMANDS_URL);
+    commands.forEach(async command => {
+        console.log(await rest.delete(`${commandsRoute}/${command.id}`));
+    });
+    console.log(await rest.get(API_COMMANDS_URL));
 
     try {
         await rest.put(API_COMMANDS_URL, { body: commandsBody });
@@ -80,4 +79,11 @@ for (const file of commandFiles) {
     // } catch(err) {
     //     console.error(err);
     // }
-})();
+}
+
+main()
+    .then(() => process.exit(0))
+    .catch(err => {
+        console.log(err);
+        process.exit(1);
+    });
