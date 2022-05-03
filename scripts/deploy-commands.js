@@ -17,6 +17,8 @@ async function main() {
         file => file.endsWith('.js')
     );
 
+    console.log('commands from disk', commandFiles);
+
     const commandsBody = [];
     for (const file of commandFiles) {
         const command = require(`../src/commands/${file}`);
@@ -25,11 +27,11 @@ async function main() {
 
     const rest = new REST({ version: '9' }).setToken(DISCORD_BOT_TOKEN);
     // delete all existing commands
-    const commands = await rest.get(API_COMMANDS_URL);
-    commands.forEach(async command => {
-        console.log(await rest.delete(`${API_COMMANDS_URL}/${command.id}`));
-    });
-    console.log(await rest.get(API_COMMANDS_URL));
+    // const commands = await rest.get(API_COMMANDS_URL);
+    // commands.forEach(async command => {
+    //     console.log(await rest.delete(`${API_COMMANDS_URL}/${command.id}`));
+    // });
+    console.log('commands from discord api', await rest.get(API_COMMANDS_URL));
 
     try {
         await rest.put(API_COMMANDS_URL, { body: commandsBody });
@@ -37,6 +39,8 @@ async function main() {
     } catch(err) {
         console.error(err);
     };
+
+    console.log('commands from discord api', await rest.get(API_COMMANDS_URL));
 
     // discord now makes you manage permissions in the discord client on desktop
     // try {
