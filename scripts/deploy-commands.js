@@ -5,8 +5,8 @@ const {
 	DISCORD_CLIENT_ID,
 	DISCORD_GUILD_ID,
 	DISCORD_BOT_TOKEN,
-    DISCORD_ADMIN_ROLE_ID,
-    DISCORD_CONTRIBUTOR_ROLE_ID,
+    // DISCORD_ADMIN_ROLE_ID,
+    // DISCORD_CONTRIBUTOR_ROLE_ID,
 } = process.env;
 
 const API_COMMANDS_URL = `/applications/${DISCORD_CLIENT_ID}/guilds/${DISCORD_GUILD_ID}/commands`;
@@ -39,43 +39,44 @@ for (const file of commandFiles) {
         console.error(err);
     };
 
-    try {
-        const adminPermissions = {
-            permissions: [
-                {
-                    id: DISCORD_ADMIN_ROLE_ID,
-                    type: 1,
-                    permission: true
-                }
-            ]
-        };
+    // discord now makes you manage permissions in the discord client on desktop
+    // try {
+    //     const adminPermissions = {
+    //         permissions: [
+    //             {
+    //                 id: DISCORD_ADMIN_ROLE_ID,
+    //                 type: 1,
+    //                 permission: true
+    //             }
+    //         ]
+    //     };
 
-        const commands = await rest.get(API_COMMANDS_URL);
-        for (const command of commands) {
-            if (!command.default_permission) {
-                if (command.name === 'register') {
-                    await rest.put(
-                        `${API_COMMANDS_URL}/${command.id}/permissions`,
-                        { body: {
-                            permissions: [
-                                {
-                                    id: DISCORD_CONTRIBUTOR_ROLE_ID,
-                                    type: 1,
-                                    permission: true
-                                },
-                                ...adminPermissions.permissions
-                            ]
-                        }}
-                    );  
-                } else {
-                    await rest.put(
-                        `${API_COMMANDS_URL}/${command.id}/permissions`,
-                        { body: adminPermissions }
-                    );
-                }
-            }
-        };
-        console.log('Successfully registered application command permissions.');
+    //     const commands = await rest.get(API_COMMANDS_URL);
+    //     for (const command of commands) {
+    //         if (!command.default_permission) {
+    //             if (command.name === 'register') {
+    //                 await rest.put(
+    //                     `${API_COMMANDS_URL}/${command.id}/permissions`,
+    //                     { body: {
+    //                         permissions: [
+    //                             {
+    //                                 id: DISCORD_CONTRIBUTOR_ROLE_ID,
+    //                                 type: 1,
+    //                                 permission: true
+    //                             },
+    //                             ...adminPermissions.permissions
+    //                         ]
+    //                     }}
+    //                 );  
+    //             } else {
+    //                 await rest.put(
+    //                     `${API_COMMANDS_URL}/${command.id}/permissions`,
+    //                     { body: adminPermissions }
+    //                 );
+    //             }
+    //         }
+    //     };
+    //     console.log('Successfully registered application command permissions.');
     } catch(err) {
         console.error(err);
     }
