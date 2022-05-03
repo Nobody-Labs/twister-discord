@@ -27,7 +27,7 @@ async function main() {
     // delete all existing commands
     const commands = await rest.get(API_COMMANDS_URL);
     commands.forEach(async command => {
-        console.log(await rest.delete(`${commandsRoute}/${command.id}`));
+        console.log(await rest.delete(`${API_COMMANDS_URL}/${command.id}`));
     });
     console.log(await rest.get(API_COMMANDS_URL));
 
