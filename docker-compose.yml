@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  discord-bot:
+    container_name: discord-bot
+    image: zkey-coordinator-discord
+    build: .
+    restart: always
+
+  discord-redis:
+    container_name: discord-redis
+    image: redis
+    restart: always
+    volumes:
+      - ./redis/data:/data
