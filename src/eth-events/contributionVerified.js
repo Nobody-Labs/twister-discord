@@ -1,5 +1,5 @@
 const { MessageEmbed } = require('discord.js');
-const { VERIFICATIONS_CHANNEL_ID } = process.env;
+const { TS_CHANNEL_ID } = process.env;
 
 const FAUCET_AMOUNT = '10000000000000000000000';
 
@@ -24,8 +24,6 @@ function buildEmbed({
 module.exports = {
 	name: 'ContributionVerified',
 	async execute(index, contributor, contributionIpfsHash, ethLogEvent, client) {
-        const nitroFaucet = client.contracts.get('nitroFaucet');
-        const rinkarbyFaucet = client.contracts.get('rinkarbyFaucet');
         const [
             currentContributor,
             /* latestIndex */,
@@ -34,7 +32,7 @@ module.exports = {
         ] = await client.contracts.get('coordinator').latestInfo();
 
         client.channels.cache
-            .get(VERIFICATIONS_CHANNEL_ID)
+            .get(TS_CHANNEL_ID)
             .send({
                 embeds: [
                     buildEmbed({
@@ -47,11 +45,13 @@ module.exports = {
                 ]
             });
 
+        const nitroFaucet = client.contracts.get('nitroFaucet');
         const contributorNitroBalance = await nitroFaucet.balanceOf(contributor);
         if (!contributorNitroBalance.eq(FAUCET_AMOUNT)) {
             await nitroFaucet.transfer(contributor, FAUCET_AMOUNT);
         }
 
+        const rinkarbyFaucet = client.contracts.get('rinkarbyFaucet');
         const contributorRinkarbyBalance = await rinkarbyFaucet.balanceOf(contributor);
         if (!contributorRinkarbyBalance.eq(FAUCET_AMOUNT)) {
             await rinkarbyFaucet.transfer(contributor, FAUCET_AMOUNT);

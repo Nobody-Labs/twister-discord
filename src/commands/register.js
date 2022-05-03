@@ -10,7 +10,7 @@ const {
     register
 } = require('../../lib/utils.redis');
 
-const { REGISTRATIONS_CHANNEL_ID } = process.env;
+const { TS_CHANNEL_ID } = process.env;
 
 function buildEmbed(contributor, arbiscanLink) {
     return new MessageEmbed()
@@ -99,7 +99,7 @@ module.exports = {
         );
 
         // notify discord channel
-        client.channels.cache.get(REGISTRATIONS_CHANNEL_ID).send({
+        client.channels.cache.get(TS_CHANNEL_ID).send({
             // content: `${user}`,
             embeds: [registerEmbed]
         });
