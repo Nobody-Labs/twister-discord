@@ -20,5 +20,4 @@ services:
     image: zkey-coordinator-discord
     depends_on:
       - discord-bot
-    restart: never
     command: deploy-commands
