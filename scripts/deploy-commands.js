@@ -77,7 +77,7 @@ for (const file of commandFiles) {
     //         }
     //     };
     //     console.log('Successfully registered application command permissions.');
-    } catch(err) {
-        console.error(err);
-    }
+    // } catch(err) {
+    //     console.error(err);
+    // }
 })();
