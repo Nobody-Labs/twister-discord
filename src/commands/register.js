@@ -38,6 +38,7 @@ module.exports = {
 	async execute(interaction, client) {
         await interaction.deferReply({ ephemeral: true });
         const user = interaction.user;
+        console.log(user);
 
         try {
             const registered = await isRegistered(user);

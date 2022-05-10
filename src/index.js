@@ -43,8 +43,8 @@ for (const file of discordEventFiles) {
 client.contracts = new Collection();
 client.contracts.set('coordinator', coordinator);
 client.contracts.set('controller', controller);
-client.contracts.set('nitroFaucet', nitroFaucet);
-client.contracts.set('rinkarbyFaucet', rinkarbyFaucet);
+client.contracts.set('nitroFaucet', nitroFaucet());
+client.contracts.set('rinkarbyFaucet', rinkarbyFaucet());
 
 for (const file of ethEventFiles) {
     const event = require(`./eth-events/${file}`);
